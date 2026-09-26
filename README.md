@@ -31,7 +31,7 @@ npm install cfemail
 npm install @react-email/render
 ```
 
-Runs on Workers, Node 18+, Bun and Deno. Zero runtime dependencies.
+Runs on Workers, Node 18+, Bun and Deno (the test suite itself needs Node 20+). Zero runtime dependencies.
 
 ## Which transport?
 
