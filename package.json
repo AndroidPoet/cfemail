@@ -1,0 +1,80 @@
+{
+  "name": "cfemail",
+  "version": "0.1.0",
+  "description": "Resend-style SDK for Cloudflare Email Service. One client for the Workers send_email binding and the REST API, with batch, idempotency, suppressions, sending domains, lifecycle events and webhooks.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./testing": {
+      "types": "./dist/testing.d.ts",
+      "import": "./dist/testing.js",
+      "require": "./dist/testing.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit && vitest run --reporter=dot",
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build"
+  },
+  "keywords": [
+    "cloudflare",
+    "email",
+    "cloudflare-email",
+    "email-service",
+    "send_email",
+    "workers",
+    "resend",
+    "transactional-email",
+    "sdk"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndroidPoet/cfemail.git"
+  },
+  "homepage": "https://github.com/AndroidPoet/cfemail#readme",
+  "bugs": {
+    "url": "https://github.com/AndroidPoet/cfemail/issues"
+  },
+  "peerDependencies": {
+    "@react-email/render": ">=1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@react-email/render": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260926.1",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "allowScripts": {
+    "esbuild@0.27.7": true
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cfemail-example",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "send_email": [
+    {
+      "name": "EMAIL",
+      // Uncomment for real sends under `wrangler dev`.
+      // "remote": true
+    }
+  ],
+  "kv_namespaces": [
+    { "binding": "IDEMPOTENCY", "id": "replace-with-your-kv-id" }
+  ],
+  "queues": {
+    "consumers": [
+      // Create with: wrangler queues create email-events
+      // Then: wrangler queues subscription create email-events --source email.sending ...
+      { "queue": "email-events", "max_batch_size": 50, "max_retries": 5 }
+    ]
+  },
+  "vars": {
+    "WEBHOOK_URL": "https://example.com/hooks/email"
+  }
+  // Secrets (wrangler secret put): WEBHOOK_SECRET
+}
