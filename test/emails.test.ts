@@ -19,7 +19,7 @@ describe("emails.send over the Workers binding", () => {
     expect(cf.transportKind).toBe("binding");
     expect(binding.sent[0]).toMatchObject({
       from: { email: "hello@acme.com", name: "Acme" },
-      to: [{ email: "user@example.com" }],
+      to: ["user@example.com"],
       subject: "Hi",
       html: "<p>hi</p>",
     });
@@ -43,10 +43,10 @@ describe("emails.send over the Workers binding", () => {
     });
     expect(error).toBeNull();
     const msg = binding.sent[0]!;
-    expect(msg.to).toEqual([{ email: "a@x.com", name: "A" }, { email: "b@x.com" }]);
+    expect(msg.to).toEqual([{ email: "a@x.com", name: "A" }, "b@x.com"]);
     expect(msg.cc).toEqual([{ email: "c@x.com", name: "C" }]);
-    expect(msg.bcc).toEqual([{ email: "d@x.com" }]);
-    expect(msg.replyTo).toEqual({ email: "support@acme.com" });
+    expect(msg.bcc).toEqual(["d@x.com"]);
+    expect(msg.replyTo).toBe("support@acme.com");
     expect(msg.headers).toEqual({ "X-Trace": "abc", "X-Tag-campaign": "welcome" });
     expect(msg.attachments).toEqual([
       { filename: "a.txt", content: "aGVsbG8=", type: "text/plain", disposition: "attachment" },

@@ -5,3 +5,6 @@ coverage/
 .dev.vars
 *.log
 .DS_Store
+examples/worker/wrangler.live.jsonc
+examples/worker/node_modules/
+examples/worker/package-lock.json

@@ -11,3 +11,5 @@ Initial release.
 - `suppressions` and `domains` (sending subdomains + DNS) resources.
 - Typed Queues lifecycle events, `handleEmailEvents`, and signed webhook forwarding.
 - `cfemail/testing` with a mock binding, mock fetch and event fixtures.
+- Verified live against Cloudflare on 2026-09-26: REST send, batch, suppressions, domains and DNS; Workers binding send, idempotent replay and batch through the example Worker.
+- Binding transport sends unnamed addresses as plain strings: the runtime rejects an `EmailAddress` object without `name`.

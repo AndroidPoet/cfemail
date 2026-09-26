@@ -8,13 +8,24 @@ import { CfEmail, forwardEvents, handleEmailEvents, type CreateEmailOptions } fr
 interface Env {
   EMAIL: SendEmail;
   IDEMPOTENCY: KVNamespace;
-  WEBHOOK_URL: string;
-  WEBHOOK_SECRET: string;
+  /** Optional bearer token protecting the HTTP endpoints. Set with `wrangler secret put API_KEY`. */
+  API_KEY?: string;
+  WEBHOOK_URL?: string;
+  WEBHOOK_SECRET?: string;
+}
+
+function authorized(request: Request, env: Env): boolean {
+  if (!env.API_KEY) return true;
+  return request.headers.get("Authorization") === `Bearer ${env.API_KEY}`;
 }
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
+
+    if (request.method === "POST" && !authorized(request, env)) {
+      return Response.json({ name: "invalid_api_key", message: "Unauthorized" }, { status: 401 });
+    }
 
     if (request.method === "POST" && url.pathname === "/emails") {
       const cf = new CfEmail({ binding: env.EMAIL, idempotencyStore: env.IDEMPOTENCY });
@@ -22,12 +33,7 @@ export default {
       const idempotencyKey = request.headers.get("Idempotency-Key") ?? undefined;
 
       const { data, error } = await cf.emails.send(payload, { idempotencyKey });
-      if (error) {
-        return Response.json(
-          { name: error.name, message: error.message, statusCode: error.statusCode },
-          { status: error.statusCode || 500 },
-        );
-      }
+      if (error) return Response.json(error.toJSON(), { status: error.statusCode || 500 });
       return Response.json(data, { status: 200 });
     }
 
@@ -47,6 +53,7 @@ export default {
     await handleEmailEvents(batch, {
       "email.bounced": (event) => console.log("bounced", event.data.to[0], event.data.bounce),
       "email.complained": (event) => console.log("complaint", event.data.to[0]),
+      onEvent: (event) => console.log(event.type, event.data.email_id, event.data.to[0]),
     });
 
     // Option B: forward as signed webhooks (Resend-style payloads).

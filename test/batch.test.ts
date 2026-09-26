@@ -17,7 +17,7 @@ describe("batch.send", () => {
     expect(error).toBeNull();
     expect(data?.data.map((d) => d?.id)).toEqual(["mock-1", "mock-2", "mock-3"]);
     expect(data?.errors).toEqual([]);
-    expect(binding.sent.map((m) => m.to[0]?.email)).toEqual([
+    expect(binding.sent.map((m) => m.to[0])).toEqual([
       "u0@example.com",
       "u1@example.com",
       "u2@example.com",
@@ -26,7 +26,7 @@ describe("batch.send", () => {
 
   it("reports partial failures without failing the batch", async () => {
     const binding = createMockBinding({
-      inspect: (msg) => (msg.to[0]?.email === "u1@example.com" ? "E_RECIPIENT_SUPPRESSED" : undefined),
+      inspect: (msg) => (msg.to[0] === "u1@example.com" ? "E_RECIPIENT_SUPPRESSED" : undefined),
     });
     const cf = new CfEmail({ binding });
     const { data, error } = await cf.batch.send([mk(0), mk(1), mk(2)]);

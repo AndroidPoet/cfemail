@@ -22,6 +22,7 @@ export type { Transport, TransportKind, TransportResult } from "./transports/tra
 export {
   BindingTransport,
   toBindingMessage,
+  toBindingAddress,
   type SendEmailBinding,
   type BindingMessage,
 } from "./transports/binding";
